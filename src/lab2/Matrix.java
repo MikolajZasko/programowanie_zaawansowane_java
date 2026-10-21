@@ -358,7 +358,46 @@ public class Matrix {
 
         // do we create a new matrix ???
         return this;
-    } 
+    }
+
+    // inverts the matrix
+    // finish gemini point 5 -
+    // finish the 0's problem
+    // send untill tomorrow
+    void inv() {
+        // check if matrix is n x n and if det != 0
+        if ( det() == 0 ){
+            throw new RuntimeException(String.format("Error: can't inv a matrix that has det == 0 \n%s",
+                    toString()
+            ));
+        }
+
+        Matrix eye = Matrix.eye(cols);
+
+        // rows == cols
+        // for now we assume that there is no 0 at the main diagonal - how to fix this?
+        for (int n = 0; n < rows; n++ ) {
+            double current_element = get(n,n);
+
+            for ( int c = 0; c < cols; c++ ) {
+                set(n,c,get(n,c) / current_element);
+            }
+
+            // now the element at the main diagonal is 1,
+            // using this 1 we 0 other elements in this column
+
+            for ( int r = 0; r < rows; r++ ) {
+
+                double rows_to_sub = get(r,n);
+
+                for ( int c = 0; c < cols; c++ ) {
+                    if (r == n) continue;
+
+                    set(r, c, get(r, c) - (rows_to_sub * get(n, c)));
+                }
+            }
+        }
+    }
 
     // helper functions
     boolean in_bounds (int r, int c) {
@@ -373,7 +412,7 @@ public class Matrix {
     boolean same_shape(Matrix m1, Matrix m2) {
         // check if same shape
         if (m1.shape() != m2.shape()) {
-            throw new RuntimeException(String.format("Error: can't add 2 matrixes of different shape \n m1: %s\nm2: %s", 
+            throw new RuntimeException(String.format("Error: can't add 2 matrixes of different shape \n m1: %s\nm2: %s",
             m1.toString(), 
             m2.toString()));
         }
