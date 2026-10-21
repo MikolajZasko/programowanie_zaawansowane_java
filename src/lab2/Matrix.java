@@ -49,11 +49,7 @@ public class Matrix {
 
             for (int j = 0; j < this.cols; j++) {
 
-                // 3 
-                // 0 1 2 
                 if (current_length > j){
-                    System.out.println("current_length: " + current_length);
-                    System.out.println("j: " + j);
                     this.data[(this.cols * i) + j] = d[i][j];
                 }
                 else {
@@ -61,9 +57,6 @@ public class Matrix {
                 }
             }
         }
-
-        System.out.println("max_row: " + max_row);
-        System.out.println("max_row_index: " + max_row_index);
     }
 
     
