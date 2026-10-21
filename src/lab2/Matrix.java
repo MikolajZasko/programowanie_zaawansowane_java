@@ -1,3 +1,5 @@
+package lab2;
+
 // pierwiastek sumy kwadratów - Frobenius
 
 public class Matrix {
@@ -211,7 +213,6 @@ public class Matrix {
                 }
 
                 new_m.set(r, c, sum);
-
             }
         }
 
