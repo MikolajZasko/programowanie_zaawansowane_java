@@ -44,6 +44,7 @@ class MatrixTest {
         assertEquals(rows, m.rows);
         assertEquals(cols, m.cols);
 
+        System.out.print("Passed 🟢 \n\n");
     }
 
     @ParameterizedTest
@@ -69,6 +70,8 @@ class MatrixTest {
                 assertEquals(source_matrix[r][c],result[r][c]);
             }
         }
+
+        System.out.print("Passed 🟢 \n\n");
     }
 
     @ParameterizedTest
@@ -94,6 +97,8 @@ class MatrixTest {
                 assertEquals(source_matrix[r][c], result[r][c]);
             }
         }
+
+        System.out.print("Passed 🟢 \n\n");
     }
 
     @ParameterizedTest
@@ -111,6 +116,8 @@ class MatrixTest {
 
             }
         }
+
+        System.out.print("Passed 🟢 \n\n");
     }
 
     @Test
