@@ -194,6 +194,62 @@ public class Matrix {
         return null;
     }
 
+    // dodaje wartość w do każdego elementu
+    Matrix add(double w){
+        Matrix new_m = new Matrix(rows,cols);
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                new_m.set(r,c, get(r, c) + w);
+            }
+        }
+
+        // do we create a new matrix ???
+        return new_m;
+    }
+
+    // odejmuje wartośc w od kazdego elementu
+    Matrix sub(double w){
+        Matrix new_m = new Matrix(rows,cols);
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                new_m.set(r,c, get(r, c) - w);
+            }
+        }
+
+        // do we create a new matrix ???
+        return new_m;
+    }
+
+    // mnoży każdy element przez skalar w
+    Matrix mul(double w){
+        Matrix new_m = new Matrix(rows,cols);
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                new_m.set(r,c, get(r, c) * w);
+            }
+        }
+
+        // do we create a new matrix ???
+        return new_m;
+    }
+
+    // dzieli każdy element przez skalar w
+    Matrix div(double w){
+        Matrix new_m = new Matrix(rows,cols);
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                new_m.set(r,c, get(r, c) / w);
+            }
+        }
+
+        // do we create a new matrix ???
+        return new_m;
+    }
+
     Matrix dot(Matrix m) {
         // check if possible
         if (cols != m.rows) {
@@ -347,62 +403,6 @@ public class Matrix {
             this.cols = newCols;
             this.rows = newRows;
         }
-    }
-
-    // dodaje wartość w do każdego elementu
-    Matrix add(double w){
-        // Matrix new_m = new Matrix(rows,cols);
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                set(r,c, get(r, c) + w);
-            }
-        }
-
-        // do we create a new matrix ???
-        return this;
-    } 
-
-    // odejmuje wartośc w od kazdego elementu
-    Matrix sub(double w){
-        // Matrix new_m = new Matrix(rows,cols);
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                set(r,c, get(r, c) - w);
-            }
-        }
-
-        // do we create a new matrix ???
-        return this;
-    } 
-
-    // mnoży każdy element przez skalar w
-    Matrix mul(double w){
-        // Matrix new_m = new Matrix(rows,cols);
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                set(r,c, get(r, c) * w);
-            }
-        }
-
-        // do we create a new matrix ???
-        return this;
-    } 
-
-    // dzieli każdy element przez skalar w
-    Matrix div(double w){
-        // Matrix new_m = new Matrix(rows,cols);
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                set(r,c, get(r, c) / w);
-            }
-        }
-
-        // do we create a new matrix ???
-        return this;
     }
 
     // solves Ax = b
