@@ -1,13 +1,16 @@
 package lab2;
 
-import org.junit.jupiter.api.Test;
-
+// java imports
 import java.util.Arrays;
 
+// test imports
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+// external lib for testing matrixes
+import org.ejml.simple.SimpleMatrix;
 
 class MatrixTest {
 
@@ -149,7 +152,7 @@ class MatrixTest {
                 m.reshape(newRows, newCols);
             });
 
-            System.out.print("Exception caught! 🔵 \n");
+            System.out.print("Exception caught: invalid reshape params 🔵 \n");
         }
         else  {
             m.reshape(newRows, newCols);
@@ -233,6 +236,30 @@ class MatrixTest {
         System.out.print("Passed 🟢 \n\n");
     }
 
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void det(double[][] source_matrix) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+
+        Matrix m = new Matrix(source_matrix);
+        SimpleMatrix ejm_m = new SimpleMatrix(source_matrix);
+
+        if (m.cols != m.rows) {
+            assertThrows(RuntimeException.class, m::det);
+
+            System.out.print("Exception caught: non square matrix 🔵 \n");
+        }
+
+        else  {
+            double my_det = m.det();
+            double ejm_det = ejm_m.determinant();
+
+            assertEquals(my_det,ejm_det);
+        }
+
+        System.out.print("Passed 🟢 \n\n");
+    }
+
     @Test
     void frobenius() {
     }
@@ -243,10 +270,6 @@ class MatrixTest {
 
     @Test
     void dot() {
-    }
-
-    @Test
-    void det() {
     }
 
     @Test
