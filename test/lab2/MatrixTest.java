@@ -2,55 +2,117 @@ package lab2;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatrixTest {
 
+    // variables
+    double [][] source_rect = {
+            {1,2,3,7},
+            {4,5,6,8}
+    };
+
+    double [][] source_square = {
+            {1,2,3},
+            {4,5,6},
+            {7,8,9}
+    };
+
+    double [][][] tested_matrixes = {
+            source_rect,
+            source_square
+    };
+
     @Test
     void testDimensionsConstructor() {
 
-        int cols = 3;
-        int rows = 3;
+        for (double[][] source_matrix : tested_matrixes) {
 
-        Matrix m = new Matrix(rows,cols);
+            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
 
-        assertEquals(rows,m.rows);
-        assertEquals(cols,m.cols);
+            int cols = source_matrix[0].length;
+            int rows = source_matrix.length;
+
+            Matrix m = new Matrix(rows, cols);
+
+            assertEquals(rows, m.rows);
+            assertEquals(cols, m.cols);
+        }
     }
 
     @Test
     void testArrayConstructor() {
 
-        double [][] source = {
-                {1,2,3},
-                {4,5,6}
-        };
+        for (double[][] source_matrix : tested_matrixes) {
 
-        Matrix m = new Matrix(source);
+            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
 
-        double [][] result = m.asArray();
+            Matrix m = new Matrix(source_matrix);
 
-        // check row amount
-        assertEquals(source.length,result.length);
+            double [][] result = m.asArray();
 
-        for (int r = 0; r < m.rows; r++) {
+            // check row amount
+            assertEquals(source_matrix.length,result.length);
 
-            // check row size
-            assertEquals(source[r].length,result[r].length);
+            for (int r = 0; r < m.rows; r++) {
 
-            // check values
-            for (int c = 0; c < m.cols; c++) {
-                assertEquals(source[r][c],result[r][c]);
+                // check row size
+                assertEquals(source_matrix[r].length,result[r].length);
+
+                // check values
+                for (int c = 0; c < m.cols; c++) {
+                    assertEquals(source_matrix[r][c],result[r][c]);
+                }
             }
         }
     }
 
     @Test
     void asArray() {
+        // test quite literally equal to testArrayConstructor
+        for (double[][] source_matrix : tested_matrixes) {
+
+            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+
+            Matrix m = new Matrix(source_matrix);
+
+            double[][] result = m.asArray();
+
+            // check row amount
+            assertEquals(source_matrix.length, result.length);
+
+            for (int r = 0; r < m.rows; r++) {
+
+                // check row size
+                assertEquals(source_matrix[r].length, result[r].length);
+
+                // check values
+                for (int c = 0; c < m.cols; c++) {
+                    assertEquals(source_matrix[r][c], result[r][c]);
+                }
+            }
+        }
     }
 
     @Test
     void get() {
+        for (double[][] source_matrix : tested_matrixes) {
+
+            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+
+            Matrix m = new Matrix(source_matrix);
+
+            // check all the values
+            for (int r = 0; r < m.rows; r++) {
+                for (int c = 0; c < m.rows; c++) {
+
+                    assertEquals(source_matrix[r][c], m.get(r,c));
+
+                }
+            }
+        }
     }
 
     @Test
