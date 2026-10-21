@@ -285,6 +285,72 @@ public class Matrix {
         return det;
     }
 
+    // inverts the matrix
+    Matrix inv() {
+        // check if matrix is n x n and if det != 0
+        if ( det() == 0 ){
+            throw new RuntimeException(String.format("Error: can't inv a matrix that has det == 0 \n%s",
+                    toString()
+            ));
+        }
+
+        Matrix e = Matrix.eye(cols);
+
+        // rows == cols
+        // for now we assume that there is no 0 at the main diagonal - how to fix this?
+        for (int n = 0; n < rows; n++ ) {
+            double current_element = get(n,n);
+
+            // if 0 find a row to swap with (value not 0)
+
+            if (current_element == 0) {
+
+                boolean swapped = false;
+                for (int i = n + 1; i < rows; i++) {
+                    if (get(i, n) != 0) {
+
+                        swapRows(n, i);
+                        e.swapRows(n, i);
+
+                        swapped = true;
+                        break;
+                    }
+                }
+
+                // if element at the diagonal is still 0 here, the matrix is singular or cannot be inverted
+                if (!swapped) {
+                    throw new RuntimeException("Error: Matrix is singular or cannot be inverted.");
+                }
+
+                // update current_element - it probably changed due to row swapping
+                current_element = get(n, n);
+            }
+
+            // Normalize the pivot row (make the diagonal element 1)
+            divideRow(n, current_element);
+            e.divideRow(n, current_element);
+
+            // now the element at the main diagonal is 1,
+            // using this 1 we 0 other elements in this column
+            //
+            // eliminate other rows in this column
+            for (int r = 0; r < rows; r++) {
+                if (r == n) continue;
+
+                double factor = get(r, n);
+                subtractRow(r, n, factor);    // row_r = row_r - (factor * row_n)
+                e.subtractRow(r, n, factor);  // same for identity matrix
+            }
+        }
+
+        return e;
+    }
+
+    // solves Ax = b
+    void solve(double[] b) {
+
+    }
+
     // setters
     void set (int r,int c, double value) {
         if (! this.in_bounds(r, c)) {
@@ -358,70 +424,6 @@ public class Matrix {
 
         // do we create a new matrix ???
         return this;
-    }
-
-    // inverts the matrix
-    // finish gemini point 5 -
-    // finish the 0's problem
-    // send untill tomorrow
-    Matrix inv() {
-        // check if matrix is n x n and if det != 0
-        if ( det() == 0 ){
-            throw new RuntimeException(String.format("Error: can't inv a matrix that has det == 0 \n%s",
-                    toString()
-            ));
-        }
-
-        Matrix e = Matrix.eye(cols);
-
-        // rows == cols
-        // for now we assume that there is no 0 at the main diagonal - how to fix this?
-        for (int n = 0; n < rows; n++ ) {
-            double current_element = get(n,n);
-
-            // if 0 find a row to swap with (value not 0)
-
-            if (current_element == 0) {
-
-                boolean swapped = false;
-                for (int i = n + 1; i < rows; i++) {
-                    if (get(i, n) != 0) {
-
-                        swapRows(n, i);
-                        e.swapRows(n, i);
-
-                        swapped = true;
-                        break;
-                    }
-                }
-
-                // if element at the diagonal is still 0 here, the matrix is singular or cannot be inverted
-                if (!swapped) {
-                    throw new RuntimeException("Error: Matrix is singular or cannot be inverted.");
-                }
-
-                // update current_element - it probably changed due to row swapping
-                current_element = get(n, n);
-            }
-
-            // Normalize the pivot row (make the diagonal element 1)
-            divideRow(n, current_element);
-            e.divideRow(n, current_element);
-
-            // now the element at the main diagonal is 1,
-            // using this 1 we 0 other elements in this column
-            //
-            // eliminate other rows in this column
-            for (int r = 0; r < rows; r++) {
-                if (r == n) continue;
-
-                double factor = get(r, n);
-                subtractRow(r, n, factor);    // row_r = row_r - (factor * row_n)
-                e.subtractRow(r, n, factor);  // same for identity matrix
-            }
-        }
-
-        return e;
     }
 
     // helper functions
