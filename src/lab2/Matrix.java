@@ -236,6 +236,55 @@ public class Matrix {
         return new_m;
     }
 
+    double det() {
+        // using Gaussian_elimination
+        // https://en.wikipedia.org/wiki/Gaussian_elimination
+        //
+        // dumb approach - 0 has to appear on a particular spot
+
+        if ( cols != rows ){
+            throw new RuntimeException(String.format("Error: det can be only calculated for square matrix, this is not a square matrix: \n%s",
+                    toString()
+            ));
+        }
+
+        // copy matrix
+        Matrix m = new Matrix(this.asArray());
+
+        // perform the Gaussian_elimination operation
+        for ( int n = 0; n < m.cols; n++) {
+            // n - current position of 0
+            for ( int r = n + 1; r < m.rows; r++) {
+                // r - row where 0 is expected to appear
+                //
+                // find what fraction needs to be before the prev column
+                double frac = m.get(r,n) / m.get(n,n);
+
+                // perform the operation for the whole row
+                for ( int c = 0; c < m.cols; c++) {
+                    double newVal = m.get(r, c) - (m.get(n, c) * frac);
+                    m.set(r, c, newVal);
+                }
+            }
+        }
+
+        // calculate the det
+        double det = 1;
+
+        for ( int n = 0; n < m.cols; n++) {
+            double current_element = m.get(n,n);
+
+            if ( current_element == 0 ) {
+                det = 0;
+                break;
+            }
+
+            det *= current_element;
+        }
+
+        return det;
+    }
+
     // setters
     void set (int r,int c, double value) {
         if (! this.in_bounds(r, c)) {
@@ -252,26 +301,6 @@ public class Matrix {
         else {
             this.cols = newCols;
             this.rows = newRows;
-        }
-    }
-
-    void gauss() {
-        // dumb approach - 0 has to appear on a particular spot
-
-        for ( int n = 0; n < cols; n++) {
-            // n - current position of 0
-            for ( int r = n + 1; r < rows; r++) {
-                // r - row where 0 is expected to appear
-                //
-                // find what fraction needs to be before the prev column
-                double frac = get(r,n) / get(n,n);
-
-                // perform the operation for the whole row
-                for ( int c = 0; c < cols; c++) {
-                    double newVal = get(r, c) - (get(n, c) * frac);
-                    set(r, c, newVal);
-                }
-            }
         }
     }
 
