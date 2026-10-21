@@ -120,6 +120,20 @@ public class Matrix {
         return buf.toString();
     }
 
+    public double frobenius() {
+
+        double sum = 0;
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                double tmp = get(r,c);
+                sum += tmp * tmp;
+            }
+        }
+
+        return sum;
+    }
+
     public int[] shape() {
         return new int[] { rows, cols };
     }
