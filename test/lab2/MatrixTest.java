@@ -120,8 +120,44 @@ class MatrixTest {
         System.out.print("Passed 🟢 \n\n");
     }
 
-    @Test
-    void testToString() {
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void testToString(double[][] source_matrix) {
+        System.out.printf("This is a manual test count the string contents.\nTesting matrix: %s\n", Arrays.deepToString(source_matrix));
+
+        Matrix m = new Matrix(source_matrix);
+
+        System.out.printf("Result: %s\n", m.toString());
+
+        System.out.print("Manual 🔵 \n\n");
+    }
+
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void reshape(double[][] source_matrix) {
+
+        //
+        int newRows = 4;
+        int newCols = 2;
+
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+
+        Matrix m = new Matrix(source_matrix);
+
+        if(m.rows * m.cols != newRows * newCols) {
+            assertThrows(RuntimeException.class, () -> {
+                m.reshape(newRows, newCols);
+            });
+
+            System.out.print("Exception caught! 🔵 \n");
+        }
+        else  {
+            m.reshape(newRows, newCols);
+
+            System.out.print("Reshaping successful! 🔵 \n");
+        }
+
+        System.out.print("Passed 🟢 \n\n");
     }
 
     @Test
@@ -162,10 +198,6 @@ class MatrixTest {
 
     @Test
     void set() {
-    }
-
-    @Test
-    void reshape() {
     }
 
     @Test
