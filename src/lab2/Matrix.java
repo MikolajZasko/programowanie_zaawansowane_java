@@ -236,37 +236,6 @@ public class Matrix {
         return new_m;
     }
 
-    public static Matrix random(int rows, int cols){
-        Matrix m = new Matrix(rows,cols);
-        Random random_gen = new Random();
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                m.set(r,c,random_gen.nextDouble());
-            }
-        }
-
-        return m;
-    }
-
-    public static Matrix eye(int n){
-        Matrix m = new Matrix(n,n);
-
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-
-                if (r == c) {
-                    m.set(r,c,1);
-                }
-                else {
-                    m.set(r,c,0);
-                }
-            }
-        }
-
-        return m;
-    }
-
     // setters
     void set (int r,int c, double value) {
         if (! this.in_bounds(r, c)) {
@@ -363,29 +332,35 @@ public class Matrix {
         return true;
     }
 
-//    // debugging function
-//    public static void main(String[] args) {
-//        double [][] d = {{1,2},{1,23,2}};
-//
-//        Matrix m = new Matrix(d);
-//
-//        double [][] a = m.asArray();
-//
-//        for (double[] elem : a) {
-//            for (double item : elem) {
-//                System.out.println("item: " + item);
-//            }
-//        }
-//
-//        m.get(0, 0);
-//        // m.get(3, 3);
-//
-//        System.out.println(m.toString());
-//
-//        double [][] b = {{1,2,2},{1,2,2},{1,2,2},{1,2,2}};
-//
-//        Matrix c = new Matrix(b);
-//
-//        System.out.println(c.toString());
-//    }
+    // static functions
+    public static Matrix random(int rows, int cols){
+        Matrix m = new Matrix(rows,cols);
+        Random random_gen = new Random();
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                m.set(r,c,random_gen.nextDouble());
+            }
+        }
+
+        return m;
+    }
+
+    public static Matrix eye(int n){
+        Matrix m = new Matrix(n,n);
+
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+
+                if (r == c) {
+                    m.set(r,c,1);
+                }
+                else {
+                    m.set(r,c,0);
+                }
+            }
+        }
+
+        return m;
+    }
 }
