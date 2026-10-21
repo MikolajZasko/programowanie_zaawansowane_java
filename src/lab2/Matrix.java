@@ -382,68 +382,42 @@ public class Matrix {
             // if 0 find a row to swap with (value not 0)
 
             if (current_element == 0) {
+
+                boolean swapped = false;
                 for (int i = n + 1; i < rows; i++) {
-                    if (get(i,n) != 0) {
-                        // swap row i with row n
-                        double [] tmp_row = new double[cols];
-                        double [] tmp_row_eye = new double[cols];
+                    if (get(i, n) != 0) {
 
-                        for (int j = 0; j < cols; j++) {
-                            // base matrix
-                            tmp_row[j] = get(i,j);
-                            set(i,j,get(n,j));
+                        swapRows(n, i);
+                        e.swapRows(n, i);
 
-                            // eye matrix
-                            tmp_row_eye[j] = e.get(i,j);
-                            e.set(i,j,e.get(n,j));
-                        }
-
-                        for (int j = 0; j < cols; j++) {
-                            // base matrix
-                            set(n,j,tmp_row[j]);
-
-                            // eye matrix
-                            e.set(n,j,tmp_row_eye[j]);
-                        }
-
+                        swapped = true;
                         break;
                     }
                 }
 
-                // update current_element - it probably changed due to row swapping
-                current_element = get(n,n);
-            }
+                // if element at the diagonal is still 0 here, the matrix is singular or cannot be inverted
+                if (!swapped) {
+                    throw new RuntimeException("Error: Matrix is singular or cannot be inverted.");
+                }
 
-            // if element at the diagonal is still 0 here, the matrix is singular or cannot be inverted
-            if (current_element == 0) {
-                throw new RuntimeException("Error: Matrix is singular or cannot be inverted (zero pivot encountered).");
+                // update current_element - it probably changed due to row swapping
+                current_element = get(n, n);
             }
 
             // Normalize the pivot row (make the diagonal element 1)
-            for ( int c = 0; c < cols; c++ ) {
-                // base matrix
-                set(n,c,get(n,c) / current_element);
-
-                // eye matrix
-                e.set(n,c, e.get(n,c) / current_element);
-
-            }
+            divideRow(n, current_element);
+            e.divideRow(n, current_element);
 
             // now the element at the main diagonal is 1,
             // using this 1 we 0 other elements in this column
-            for ( int r = 0; r < rows; r++ ) {
-
+            //
+            // eliminate other rows in this column
+            for (int r = 0; r < rows; r++) {
                 if (r == n) continue;
 
-                double rows_to_sub = get(r,n);
-
-                for ( int c = 0; c < cols; c++ ) {
-                    // base matrix
-                    set(r, c, get(r, c) - (rows_to_sub * get(n, c)));
-
-                    // eye matrix
-                    e.set(r, c, e.get(r, c) - (rows_to_sub * e.get(n, c)));
-                }
+                double factor = get(r, n);
+                subtractRow(r, n, factor);    // row_r = row_r - (factor * row_n)
+                e.subtractRow(r, n, factor);  // same for identity matrix
             }
         }
 
@@ -469,6 +443,30 @@ public class Matrix {
         }
 
         return true;
+    }
+
+    // Swaps two entire rows
+    public void swapRows(int r1, int r2) {
+        for (int c = 0; c < cols; c++) {
+            double temp = get(r1, c);
+            set(r1, c, get(r2, c));
+            set(r2, c, temp);
+        }
+    }
+
+    // Divides an entire row by a scalar (Normalization)
+    public void divideRow(int r, double scalar) {
+        for (int c = 0; c < cols; c++) {
+            set(r, c, get(r, c) / scalar);
+        }
+    }
+
+    // Subtracts a scalar multiple of sourceRow from targetRow
+    public void subtractRow(int targetRow, int sourceRow, double scalar) {
+        for (int c = 0; c < cols; c++) {
+            double newVal = get(targetRow, c) - (scalar * get(sourceRow, c));
+            set(targetRow, c, newVal);
+        }
     }
 
     // static functions
