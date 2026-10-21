@@ -175,6 +175,25 @@ class MatrixTest {
         System.out.print("Passed 🟢 \n\n");
     }
 
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void mul(double[][] source_matrix) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+
+        Matrix m = new Matrix(source_matrix);
+
+        Matrix result1 = m.mul(-1);
+
+        System.out.printf("After mul (new matrix): %s\n",result1.toString());
+
+        Matrix result2 = result1.sub(m);
+
+        System.out.printf("After sub (new matrix): %s\n",result2.toString());
+
+        assertEquals(0,result2.frobenius());
+        System.out.print("Passed 🟢 \n\n");
+    }
+
     @Test
     void frobenius() {
     }
@@ -185,10 +204,6 @@ class MatrixTest {
 
     @Test
     void add() {
-    }
-
-    @Test
-    void mul() {
     }
 
     @Test
