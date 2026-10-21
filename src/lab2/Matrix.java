@@ -364,7 +364,7 @@ public class Matrix {
     // finish gemini point 5 -
     // finish the 0's problem
     // send untill tomorrow
-    void inv() {
+    Matrix inv() {
         // check if matrix is n x n and if det != 0
         if ( det() == 0 ){
             throw new RuntimeException(String.format("Error: can't inv a matrix that has det == 0 \n%s",
@@ -372,31 +372,82 @@ public class Matrix {
             ));
         }
 
-        Matrix eye = Matrix.eye(cols);
+        Matrix e = Matrix.eye(cols);
 
         // rows == cols
         // for now we assume that there is no 0 at the main diagonal - how to fix this?
         for (int n = 0; n < rows; n++ ) {
             double current_element = get(n,n);
 
+            // if 0 find a row to swap with (value not 0)
+
+            if (current_element == 0) {
+                for (int i = n + 1; i < rows; i++) {
+                    if (get(i,n) != 0) {
+                        // swap row i with row n
+                        double [] tmp_row = new double[cols];
+                        double [] tmp_row_eye = new double[cols];
+
+                        for (int j = 0; j < cols; j++) {
+                            // base matrix
+                            tmp_row[j] = get(i,j);
+                            set(i,j,get(n,j));
+
+                            // eye matrix
+                            tmp_row_eye[j] = e.get(i,j);
+                            e.set(i,j,e.get(n,j));
+                        }
+
+                        for (int j = 0; j < cols; j++) {
+                            // base matrix
+                            set(n,j,tmp_row[j]);
+
+                            // eye matrix
+                            e.set(n,j,tmp_row_eye[j]);
+                        }
+
+                        break;
+                    }
+                }
+
+                // update current_element - it probably changed due to row swapping
+                current_element = get(n,n);
+            }
+
+            // if element at the diagonal is still 0 here, the matrix is singular or cannot be inverted
+            if (current_element == 0) {
+                throw new RuntimeException("Error: Matrix is singular or cannot be inverted (zero pivot encountered).");
+            }
+
+            // Normalize the pivot row (make the diagonal element 1)
             for ( int c = 0; c < cols; c++ ) {
+                // base matrix
                 set(n,c,get(n,c) / current_element);
+
+                // eye matrix
+                e.set(n,c, e.get(n,c) / current_element);
+
             }
 
             // now the element at the main diagonal is 1,
             // using this 1 we 0 other elements in this column
-
             for ( int r = 0; r < rows; r++ ) {
+
+                if (r == n) continue;
 
                 double rows_to_sub = get(r,n);
 
                 for ( int c = 0; c < cols; c++ ) {
-                    if (r == n) continue;
-
+                    // base matrix
                     set(r, c, get(r, c) - (rows_to_sub * get(n, c)));
+
+                    // eye matrix
+                    e.set(r, c, e.get(r, c) - (rows_to_sub * e.get(n, c)));
                 }
             }
         }
+
+        return e;
     }
 
     // helper functions
