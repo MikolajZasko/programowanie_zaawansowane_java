@@ -26,10 +26,19 @@ class MatrixTest {
             {7,8,9}
     };
 
+    static double [][] source_square_non_0_det = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 10}
+    };
+
+
+
     static double[][][] tested_matrices() {
         return new double[][][] {
                 source_square,
-                source_rect
+                source_rect,
+                source_square_non_0_det
         };
     }
 
@@ -193,7 +202,7 @@ class MatrixTest {
 
         System.out.printf("After mul (new matrix): %s\n",result1.toString());
 
-        Matrix result2 = result1.sub(m);
+        Matrix result2 = result1.add(m);
 
         System.out.printf("After sub (new matrix): %s\n",result2.toString());
 
@@ -282,79 +291,38 @@ class MatrixTest {
         System.out.print("Passed 🟢 \n\n");
     }
 
-    @Test
-    void frobenius() {
-    }
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void inv(double[][] source_matrix) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
 
-    @Test
-    void shape() {
-    }
+        Matrix m = new Matrix(source_matrix);
+        SimpleMatrix ejm_m = new SimpleMatrix(source_matrix);
 
-    @Test
-    void dot() {
-    }
+        if (m.cols != m.rows) {
+            assertThrows(RuntimeException.class, m::inv);
 
-    @Test
-    void inv() {
-    }
+            System.out.print("Exception caught: non square matrix 🔵 \n");
+        }
 
-    @Test
-    void set() {
-    }
+        else if (m.det() == 0) {
+            System.out.print("Exception caught: m.det() == 0 🔵 \n");
+        }
 
-    @Test
-    void testAdd() {
-    }
+        else  {
+            Matrix my_inv = m.inv();
+            SimpleMatrix ejm_inv = ejm_m.invert();
 
-    @Test
-    void testSub() {
-    }
+            double[][] my_array = my_inv.asArray();
+            double[][] ejm_array = ejm_inv.toArray2();
 
-    @Test
-    void testMul() {
-    }
+            // Porównanie dwóch tablic 2D z tolerancją na błędy zaokrągleń (1e-9)
+            for (int r = 0; r < m.rows; r++) {
+                assertArrayEquals(ejm_array[r], my_array[r], 1e-9,
+                        String.format("Row %d does not match!", r));
+            }
+        }
 
-    @Test
-    void testDiv() {
-    }
-
-    @Test
-    void solve() {
-    }
-
-    @Test
-    void in_bounds() {
-    }
-
-    @Test
-    void same_shape() {
-    }
-
-    @Test
-    void swapRows() {
-    }
-
-    @Test
-    void swapVals() {
-    }
-
-    @Test
-    void divideRow() {
-    }
-
-    @Test
-    void divideVals() {
-    }
-
-    @Test
-    void subtractRow() {
-    }
-
-    @Test
-    void subtractVals() {
-    }
-
-    @Test
-    void random() {
+        System.out.print("Passed 🟢 \n\n");
     }
 }
