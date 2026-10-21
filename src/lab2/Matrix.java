@@ -255,6 +255,26 @@ public class Matrix {
         }
     }
 
+    void gauss() {
+        // dumb approach - 0 has to appear on a particular spot
+
+        for ( int n = 0; n < cols; n++) {
+            // n - current position of 0
+            for ( int r = n + 1; r < rows; r++) {
+                // r - row where 0 is expected to appear
+                //
+                // find what fraction needs to be before the prev column
+                double frac = get(r,n) / get(n,n);
+
+                // perform the operation for the whole row
+                for ( int c = 0; c < cols; c++) {
+                    double newVal = get(r, c) - (get(n, c) * frac);
+                    set(r, c, newVal);
+                }
+            }
+        }
+    }
+
     // dodaje wartość w do każdego elementu
     Matrix add(double w){
         // Matrix new_m = new Matrix(rows,cols);
