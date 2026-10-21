@@ -136,7 +136,7 @@ class MatrixTest {
     @MethodSource("tested_matrices")
     void reshape(double[][] source_matrix) {
 
-        //
+        // settings for the test
         int newRows = 4;
         int newCols = 2;
 
@@ -160,6 +160,21 @@ class MatrixTest {
         System.out.print("Passed 🟢 \n\n");
     }
 
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void sub(double[][] source_matrix) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+
+        Matrix m = new Matrix(source_matrix);
+
+        Matrix result = m.sub(m);
+
+        System.out.printf("After sub (new matrix): %s\n",result.toString());
+
+        assertEquals(0,result.frobenius());
+        System.out.print("Passed 🟢 \n\n");
+    }
+
     @Test
     void frobenius() {
     }
@@ -170,10 +185,6 @@ class MatrixTest {
 
     @Test
     void add() {
-    }
-
-    @Test
-    void sub() {
     }
 
     @Test

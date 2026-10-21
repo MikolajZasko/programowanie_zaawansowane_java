@@ -87,7 +87,7 @@ public class Matrix {
     public String toString(){
         StringBuilder buf = new StringBuilder();
         buf.append("[\n");
-        for(int i = 0;i < this.cols;i++){
+        for(int i = 0;i < this.rows;i++){
             buf.append("\t[ ");
 
             for(int j = 0;j < this.cols;j++){
