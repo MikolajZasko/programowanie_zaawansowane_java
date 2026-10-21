@@ -33,6 +33,10 @@ class MatrixTest {
         };
     }
 
+    static int[] tested_vals() {
+        return new int[] {1,5, 100};
+    }
+
     @ParameterizedTest
     @MethodSource("tested_matrices")
     void testDimensionsConstructor(double[][] source_matrix) {
@@ -260,6 +264,24 @@ class MatrixTest {
         System.out.print("Passed 🟢 \n\n");
     }
 
+    @ParameterizedTest
+    @MethodSource("tested_vals")
+    void eye(int source_val) {
+        System.out.printf("Testing val: %d\n", source_val);
+
+        Matrix m = Matrix.eye(source_val);
+
+        System.out.printf("Eye matrix (new matrix): %s\n",m.toString());
+
+        double frobenius_val = m.frobenius();
+
+        System.out.printf("Frobenius val from eye matrix: %f\n",frobenius_val);
+
+        assertEquals(Math.sqrt(source_val), frobenius_val);
+
+        System.out.print("Passed 🟢 \n\n");
+    }
+
     @Test
     void frobenius() {
     }
@@ -334,9 +356,5 @@ class MatrixTest {
 
     @Test
     void random() {
-    }
-
-    @Test
-    void eye() {
     }
 }
