@@ -73,17 +73,9 @@ public class Matrix {
 
         double [][] tmp = new double[this.rows][this.cols];
 
-        int current_row = 0;
-        int current_col = 0;
-
-        for (double item : this.data) {
-            tmp[current_row][current_col] = item;
-
-            current_col++;
-
-            if (current_col >= this.cols) {
-                current_col = 0;
-                current_row++;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                tmp[i][j] = get(i, j);
             }
         }
 
@@ -297,7 +289,6 @@ public class Matrix {
         Matrix e = Matrix.eye(cols);
 
         // rows == cols
-        // for now we assume that there is no 0 at the main diagonal - how to fix this?
         for (int n = 0; n < rows; n++ ) {
             double current_element = get(n,n);
 
@@ -344,11 +335,6 @@ public class Matrix {
         }
 
         return e;
-    }
-
-    // solves Ax = b
-    void solve(double[] b) {
-
     }
 
     // setters
@@ -426,10 +412,74 @@ public class Matrix {
         return this;
     }
 
+    // solves Ax = b
+    // modifies the base matrix (this)
+    double[] solve(double[] x) {
+        if (x.length != rows) {
+            throw new RuntimeException(String.format("Error: vector b has different amount of elements than matrix rows"));
+        }
+
+        if (det() == 0) {
+            throw new RuntimeException(String.format("Error: don't know how to solve a matrix when det == 0"));
+        }
+
+        double[] b = x.clone();
+
+        // rows == cols
+        for (int n = 0; n < rows; n++ ) {
+            double current_element = get(n, n);
+
+            // if 0 find a row to swap with (value not 0)
+            if (current_element == 0) {
+
+                boolean swapped = false;
+                for (int i = n + 1; i < rows; i++) {
+                    if (get(i, n) != 0) {
+
+                        // base matrix
+                        swapRows(n, i);
+
+                        // b vecor
+                        swapVals(n,i,b);
+
+                        swapped = true;
+                        break;
+                    }
+                }
+
+                // if element at the diagonal is still 0 here, the matrix is singular or cannot be ?solved? - it probably can i'll leave this for now
+                if (!swapped) {
+                    throw new RuntimeException("Error: Matrix is singular or cannot be inverted.");
+                }
+
+                // update current_element - it probably changed due to row swapping
+                current_element = get(n, n);
+            }
+
+            // Normalize the pivot row (make the diagonal element 1)
+            divideRow(n, current_element);
+            divideVals(n,current_element,b);
+
+            // now the element at the main diagonal is 1,
+            // using this 1 we 0 other elements in this column
+            //
+            // eliminate other rows in this column
+            for (int r = 0; r < rows; r++) {
+                if (r == n) continue;
+
+                double factor = get(r, n);
+                subtractRow(r, n, factor);    // row_r = row_r - (factor * row_n)
+                subtractVals(r,n,factor,b);
+            }
+        }
+
+        return b;
+    }
+
     // helper functions
     boolean in_bounds (int r, int c) {
         // check if in bounds
-        if (r >= rows || c >= cols){
+        if (r >= rows || c >= cols || r < 0 || c < 0){
             return false;
         }
 
@@ -456,11 +506,23 @@ public class Matrix {
         }
     }
 
+    // swaps vals at indexes i1 and i2 in vector b
+    public void swapVals(int i1, int i2, double[] b) {
+        double temp = b[i1];
+        b[i1] = b[i2];
+        b[i2] = temp;
+    }
+
     // Divides an entire row by a scalar (Normalization)
     public void divideRow(int r, double scalar) {
         for (int c = 0; c < cols; c++) {
             set(r, c, get(r, c) / scalar);
         }
+    }
+
+    // Divides an entire row by a scalar (Normalization)
+    public void divideVals(int r, double scalar, double[] b) {
+        b[r] = b[r] / scalar;
     }
 
     // Subtracts a scalar multiple of sourceRow from targetRow
@@ -469,6 +531,13 @@ public class Matrix {
             double newVal = get(targetRow, c) - (scalar * get(sourceRow, c));
             set(targetRow, c, newVal);
         }
+    }
+
+    // Subtracts a scalar multiple of sourceIndex from targetIndex
+    // in vector b
+    public void subtractVals (int targetIndex, int sourceIndex, double scalar, double[] b) {
+        double newVal = b[targetIndex] - (scalar * b[sourceIndex]);
+        b[targetIndex] = newVal;
     }
 
     // static functions
