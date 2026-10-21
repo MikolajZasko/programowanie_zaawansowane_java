@@ -71,7 +71,7 @@ public class Matrix {
     // getters
     double[][] asArray() {
 
-        double [][] tmp = new double[this.cols][this.cols];
+        double [][] tmp = new double[this.rows][this.cols];
 
         int current_row = 0;
         int current_col = 0;
@@ -165,7 +165,7 @@ public class Matrix {
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                new_m.set(r,c, get(r, c) + m.get(r, c) );
+                new_m.set(r,c, get(r, c) - m.get(r, c) );
             }
         }
 
@@ -436,7 +436,7 @@ public class Matrix {
 
     boolean same_shape(Matrix m1, Matrix m2) {
         // check if same shape
-        if (m1.shape() != m2.shape()) {
+        if (m1.rows != m2.rows || m1.cols != m2.cols) {
             throw new RuntimeException(String.format("Error: can't add 2 matrixes of different shape \n m1: %s\nm2: %s",
             m1.toString(), 
             m2.toString()));
