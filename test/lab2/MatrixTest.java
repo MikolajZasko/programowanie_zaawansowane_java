@@ -6,111 +6,109 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 class MatrixTest {
 
     // variables
-    double [][] source_rect = {
+    static double [][] source_rect = {
             {1,2,3,7},
             {4,5,6,8}
     };
 
-    double [][] source_square = {
+    static double [][] source_square = {
             {1,2,3},
             {4,5,6},
             {7,8,9}
     };
 
-    double [][][] tested_matrixes = {
-            source_rect,
-            source_square
-    };
-
-    @Test
-    void testDimensionsConstructor() {
-
-        for (double[][] source_matrix : tested_matrixes) {
-
-            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
-
-            int cols = source_matrix[0].length;
-            int rows = source_matrix.length;
-
-            Matrix m = new Matrix(rows, cols);
-
-            assertEquals(rows, m.rows);
-            assertEquals(cols, m.cols);
-        }
+    static double[][][] tested_matrices() {
+        return new double[][][] {
+                source_square,
+                source_rect
+        };
     }
 
-    @Test
-    void testArrayConstructor() {
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void testDimensionsConstructor(double[][] source_matrix) {
 
-        for (double[][] source_matrix : tested_matrixes) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
 
-            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+        int cols = source_matrix[0].length;
+        int rows = source_matrix.length;
 
-            Matrix m = new Matrix(source_matrix);
+        Matrix m = new Matrix(rows, cols);
 
-            double [][] result = m.asArray();
+        assertEquals(rows, m.rows);
+        assertEquals(cols, m.cols);
 
-            // check row amount
-            assertEquals(source_matrix.length,result.length);
+    }
 
-            for (int r = 0; r < m.rows; r++) {
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void testArrayConstructor(double[][] source_matrix) {
 
-                // check row size
-                assertEquals(source_matrix[r].length,result[r].length);
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
 
-                // check values
-                for (int c = 0; c < m.cols; c++) {
-                    assertEquals(source_matrix[r][c],result[r][c]);
-                }
+        Matrix m = new Matrix(source_matrix);
+
+        double [][] result = m.asArray();
+
+        // check row amount
+        assertEquals(source_matrix.length,result.length);
+
+        for (int r = 0; r < m.rows; r++) {
+
+            // check row size
+            assertEquals(source_matrix[r].length,result[r].length);
+
+            // check values
+            for (int c = 0; c < m.cols; c++) {
+                assertEquals(source_matrix[r][c],result[r][c]);
             }
         }
     }
 
-    @Test
-    void asArray() {
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void asArray(double[][] source_matrix) {
         // test quite literally equal to testArrayConstructor
-        for (double[][] source_matrix : tested_matrixes) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
 
-            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+        Matrix m = new Matrix(source_matrix);
 
-            Matrix m = new Matrix(source_matrix);
+        double[][] result = m.asArray();
 
-            double[][] result = m.asArray();
+        // check row amount
+        assertEquals(source_matrix.length, result.length);
 
-            // check row amount
-            assertEquals(source_matrix.length, result.length);
+        for (int r = 0; r < m.rows; r++) {
 
-            for (int r = 0; r < m.rows; r++) {
+            // check row size
+            assertEquals(source_matrix[r].length, result[r].length);
 
-                // check row size
-                assertEquals(source_matrix[r].length, result[r].length);
-
-                // check values
-                for (int c = 0; c < m.cols; c++) {
-                    assertEquals(source_matrix[r][c], result[r][c]);
-                }
+            // check values
+            for (int c = 0; c < m.cols; c++) {
+                assertEquals(source_matrix[r][c], result[r][c]);
             }
         }
     }
 
-    @Test
-    void get() {
-        for (double[][] source_matrix : tested_matrixes) {
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void get(double[][] source_matrix) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
 
-            System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+        Matrix m = new Matrix(source_matrix);
 
-            Matrix m = new Matrix(source_matrix);
+        // check all the values
+        for (int r = 0; r < m.rows; r++) {
+            for (int c = 0; c < m.rows; c++) {
 
-            // check all the values
-            for (int r = 0; r < m.rows; r++) {
-                for (int c = 0; c < m.rows; c++) {
+                assertEquals(source_matrix[r][c], m.get(r,c));
 
-                    assertEquals(source_matrix[r][c], m.get(r,c));
-
-                }
             }
         }
     }
