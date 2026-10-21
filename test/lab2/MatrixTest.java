@@ -214,16 +214,31 @@ class MatrixTest {
         System.out.print("Passed 🟢 \n\n");
     }
 
+    @ParameterizedTest
+    @MethodSource("tested_matrices")
+    void div(double[][] source_matrix) {
+        System.out.printf("Testing matrix: %s\n", Arrays.deepToString(source_matrix));
+
+        Matrix m = new Matrix(source_matrix);
+
+        Matrix result1 = m.div(m);
+
+        System.out.printf("After mul (new matrix): %s\n",result1.toString());
+        System.out.printf("New matrix frobenius: %s\n",result1.frobenius());
+
+        double result2 = Math.sqrt( result1.cols * result1.rows);
+
+        assertEquals(result2, result1.frobenius());
+
+        System.out.print("Passed 🟢 \n\n");
+    }
+
     @Test
     void frobenius() {
     }
 
     @Test
     void shape() {
-    }
-
-    @Test
-    void div() {
     }
 
     @Test
