@@ -1,5 +1,9 @@
 package lab4;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import main.java.com.mzasko.RuntimeTypeAdapterFactory;
+
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -11,7 +15,7 @@ public class Document {
     String title;
     Photo photo;
     List<Section> sections = new ArrayList<>();
-    PrintStream out;
+    transient PrintStream out;
 
     public Document(String newTitle, PrintStream newOut, String photoUrl) {
         this.title = newTitle;
@@ -79,5 +83,25 @@ public class Document {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    String toJson() {
+        RuntimeTypeAdapterFactory<Paragraph> adapter =
+                RuntimeTypeAdapterFactory
+                        .of(Paragraph.class)
+                        .registerSubtype(Paragraph.class)
+                        .registerSubtype(ParagraphWithList.class);
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(adapter).setPrettyPrinting().create();
+        return gson.toJson(this);
+    }
+
+    Document fromJson(String jsonString){
+        RuntimeTypeAdapterFactory<Paragraph> adapter =
+                RuntimeTypeAdapterFactory
+                        .of(Paragraph.class)
+                        .registerSubtype(Paragraph.class)
+                        .registerSubtype(ParagraphWithList.class);
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(adapter).setPrettyPrinting().create();
+        return gson.fromJson(jsonString, Document.class);
     }
 }

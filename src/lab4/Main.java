@@ -1,5 +1,6 @@
 package lab4;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 public class Main {
@@ -29,7 +30,21 @@ public class Main {
                                 .addListItem("Java")
                 );
 
-        cv.WriteToFile("test.html");
-        cv.writeHTML(out);
+        // html saving
+//        cv.WriteToFile("test.html");
+//        cv.writeHTML(out);
+//
+        // html out
+//        cv = cv.fromJson(cv.toJson());
+//        cv.writeHTML(out);
+
+        // json saving
+        String jsonContent = cv.toJson();
+        try (PrintStream outf = new PrintStream("test.json")) {
+            outf.print(jsonContent);
+            out.println("JSON saved to file successfully!");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
