@@ -67,8 +67,13 @@ public class Prod extends Node {
         StringBuilder b =  new StringBuilder();
         if(sign<0)b.append("-(");
 
-        for (Node n : args) {
-            b.append(n.toString());
+        int size = args.size();
+        for (int i = 0; i < size; i++) {
+            b.append(args.get(i).toString());
+            // Append " + " only if this is NOT the last node
+            if (i < size - 1) {
+                b.append("*");
+            }
         }
 
         if(sign<0)b.append(")");
