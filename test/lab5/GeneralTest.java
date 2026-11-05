@@ -2,6 +2,8 @@ package lab5;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class GeneralTest {
@@ -91,11 +93,48 @@ public class GeneralTest {
                 .add(16);
         System.out.println(circle.toString());
 
-        double xv = 100*(Math.random()-.5);
-        double yv = 100*(Math.random()-.5);
-        x.setValue(xv);
-        y.setValue(yv);
-        double fv = circle.evaluate();
-        System.out.print(String.format("Punkt (%f,%f) leży %s koła %s\n",xv,yv,(fv<0?"wewnątrz":"na zewnątrz"),circle.toString()));
+        double xv = 0;
+        double yv = 0;
+        int iterations = 0;
+        int inCircle = 0;
+        int outCircle = 0;
+
+        // Define a record for the pair
+        record IntPair(double x, double y) {}
+
+        // Initialize your list
+        List<IntPair> l = new ArrayList<>();
+
+        while (iterations < 1000 && inCircle < 100) {
+            // get random values
+            xv = 10*(Math.random()-.5);
+            yv = 10*(Math.random()-.5);
+
+            x.setValue(xv);
+            y.setValue(yv);
+
+            double fv = circle.evaluate();
+
+            if (fv < 0) {
+                inCircle++;
+                l.add(new IntPair(xv,yv));
+                System.out.printf("point: %f, %f in circle\n", xv,yv);
+            }
+            else {
+                outCircle++;
+            }
+
+//            System.out.printf("Iteration: %d\n", iterations);
+            iterations++;
+        }
+
+        System.out.printf("Points found: %d\n", inCircle);
+        System.out.printf("Iterations: %d\n", iterations);
+        // outCircle is not actually used here (could be removed),
+        // limit of 1000 can be increased (if needed)
+
+
+
+//        System.out.print(String.format("Punkt (%f,%f) leży %s koła %s\n",xv,yv,(fv<0?"wewnątrz":"na zewnątrz"),circle.toString()));
     }
 }
