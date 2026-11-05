@@ -26,4 +26,18 @@ public class Constant extends Node {
 
         return format.format(value);
     }
+
+    @Override
+    Node diff(Variable var) {
+        return new Constant(0);
+    }
+
+    @Override
+    boolean isZero() {
+        if (Math.abs(value) < tolerance) {
+            return true;
+        }
+
+        return false;
+    }
 }

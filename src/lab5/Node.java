@@ -2,6 +2,7 @@ package lab5;
 
 abstract public class Node {
     int sign=1;
+    double tolerance = 1e-9;
     Node minus(){
         sign = -1;
         return this;
@@ -31,5 +32,10 @@ abstract public class Node {
      * Zwraca liczbę argumentów węzła
      */
     int getArgumentsCount(){return 0;}
+
+    // pochodna - derivative
+    abstract Node diff(Variable var);
+
+    abstract boolean isZero();
 
 }
