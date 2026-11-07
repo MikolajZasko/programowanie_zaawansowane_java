@@ -81,6 +81,10 @@ public class Prod extends Node {
                 continue;
             }
 
+            if (args.get(i).evaluate() == 1) {
+                continue;
+            }
+
             if (i != 0 && addPlus) {
                 b.append("*");
             }
