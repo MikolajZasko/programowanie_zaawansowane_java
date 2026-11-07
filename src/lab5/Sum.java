@@ -43,16 +43,31 @@ public class Sum extends Node {
     int getArgumentsCount(){return args.size();}
 
     public String toString(){
+
+        if (isZero()) {
+            return "";
+        }
+
         StringBuilder b =  new StringBuilder();
         if(sign<0)b.append("-(");
 
         int size = args.size();
+        boolean addPlus = false;
+
         for (int i = 0; i < size; i++) {
-            b.append(args.get(i).toString());
-            // Append " + " only if this is NOT the last node
-            if (i < size - 1) {
+
+            if (args.get(i).isZero()) {
+                continue;
+            }
+
+            if (i != 0 && addPlus) {
                 b.append(" + ");
             }
+            else {
+                addPlus = true;
+            }
+
+            b.append(args.get(i).toString());
         }
 
         if(sign<0)b.append(")");
