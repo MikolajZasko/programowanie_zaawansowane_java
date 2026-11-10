@@ -4,6 +4,11 @@ import java.io.*;
 import java.util.*;
 
 public class CSVReader {
+
+    //
+    // Variables
+    //
+
     BufferedReader reader;
     String delimiter;
     boolean hasHeader;
@@ -14,6 +19,10 @@ public class CSVReader {
     Map<String,Integer> columnLabelsToInt = new HashMap<>();
 
     String[] current;
+
+    //
+    // Constructors
+    //
 
     /**
      *
@@ -48,6 +57,10 @@ public class CSVReader {
         if(hasHeader)parseHeader();
     }
 
+    //
+    // actions
+    //
+
     void parseHeader() throws IOException {
         // wczytaj wiersz
         String line = reader.readLine();
@@ -81,5 +94,37 @@ public class CSVReader {
         current = line.split(delimiter);
 
         return true;
+    }
+
+    //
+    // Getters
+    //
+
+    List<String> getColumnLabels() {
+        return columnLabels;
+    }
+
+    // either this OR summarised string length ???
+    int getRecordLength() {
+        return current.length;
+    }
+
+    boolean isMissing(int columnIndex) {
+        if (current[columnIndex] == null || current[columnIndex].isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    boolean isMissing(String columnLabel) {
+
+        int columnIndex = columnLabelsToInt.get(columnLabel);
+
+        if (current[columnIndex] == null || current[columnIndex].isEmpty()) {
+            return true;
+        }
+
+        return false;
     }
 }
