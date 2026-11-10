@@ -151,4 +151,24 @@ public class CSVReader {
 
         return getInt(columnIndex);
     }
+
+    long getLong(int columnIndex) {
+        return Long.parseLong(get(columnIndex));
+    }
+
+    long getLong(String columnLabel) {
+        int columnIndex = columnLabelsToInt.get(columnLabel);
+
+        return getLong(columnIndex);
+    }
+
+    double getDouble(int columnIndex){
+        return Double.parseDouble(get(columnIndex));
+    }
+
+    double getDouble(String columnLabel) {
+        int columnIndex = columnLabelsToInt.get(columnLabel);
+
+        return getDouble(columnIndex);
+    }
 }
