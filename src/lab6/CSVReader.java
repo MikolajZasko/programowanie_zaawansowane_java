@@ -3,10 +3,7 @@ package lab6;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CSVReader {
     BufferedReader reader;
@@ -40,11 +37,18 @@ public class CSVReader {
         if (line == null) {
             return;
         }
+
         // podziel na pola
         String[] header = line.split(delimiter);
-        // przetwarzaj dane w wierszu
+
+        // this is more efficient (i think - BUT works only for lists/arrays, not maps)
+        // Collections.addAll(columnLabels, header);
+
         for (int i = 0; i < header.length; i++) {
             // dodaj nazwy kolumn do columnLabels i numery do columnLabelsToInt
+            //
+            columnLabels.add(header[i]);
+            columnLabelsToInt.put(header[i], i);
         }
     }
 
