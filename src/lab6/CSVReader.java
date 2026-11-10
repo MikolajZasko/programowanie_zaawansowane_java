@@ -3,6 +3,7 @@ package lab6;
 import java.io.*;
 import java.util.*;
 
+@SuppressWarnings("ALL")
 public class CSVReader {
 
     //
@@ -121,10 +122,33 @@ public class CSVReader {
 
         int columnIndex = columnLabelsToInt.get(columnLabel);
 
-        if (current[columnIndex] == null || current[columnIndex].isEmpty()) {
-            return true;
+        return isMissing(columnIndex);
+    }
+
+    String get(int columnIndex) {
+
+        String val = current[columnIndex];
+
+        if (val == null) {
+            return "";
         }
 
-        return false;
+        return val;
+    }
+
+    String get(String columnLabel) {
+        int columnIndex = columnLabelsToInt.get(columnLabel);
+
+        return get(columnIndex);
+    }
+
+    int getInt(int columnIndex) {
+        return Integer.parseInt(get(columnIndex));
+    }
+
+    int getInt(String columnLabel) {
+        int columnIndex = columnLabelsToInt.get(columnLabel);
+
+        return getInt(columnIndex);
     }
 }
