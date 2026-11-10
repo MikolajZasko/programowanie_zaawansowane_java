@@ -52,9 +52,17 @@ public class CSVReader {
         }
     }
 
-    boolean next(){
+    boolean next() throws IOException {
         // czyta następny wiersz, dzieli na elementy i przypisuje do current
         //
-        return false;
+        // wczytaj wiersz
+        String line = reader.readLine();
+        if (line == null) {
+            return false;
+        }
+
+        current = line.split(delimiter);
+
+        return true;
     }
 }
