@@ -92,23 +92,59 @@ class CSVReaderTest {
         int row_index = 0;
 
         while(reader.next()) {
+            // Index 0
             try {
-                System.out.printf(Locale.US,"%s: %s \n",reader.columnLabels.get(0),reader.getInt(0));
-            }
-            catch (Exception e) {
+                System.out.printf(Locale.US, "%s: %s \n", reader.columnLabels.get(0), reader.getInt(0));
+            } catch (Exception e) {
                 System.out.print(" \n");
-
                 String message = "at " + row_index + " index in col " + 0 + " val was not found";
-
                 missing_vals.add(message);
             }
 
-            System.out.printf(Locale.US,"%s: %s \n",reader.columnLabels.get(1),reader.get(1));
-            System.out.printf(Locale.US,"%s: %s \n",reader.columnLabels.get(2),reader.get(2));
-            System.out.printf(Locale.US,"%s: %s \n",reader.columnLabels.get(3),reader.get(3));
-            System.out.printf(Locale.US,"%s: %s \n",reader.columnLabels.get(4),reader.getInt(4));
-            System.out.printf(Locale.US,"%s: %s \n",reader.columnLabels.get(5),reader.getInt(5));
+// Index 1
+            try {
+                System.out.printf(Locale.US, "%s: %s \n", reader.columnLabels.get(1), reader.get(1));
+            } catch (Exception e) {
+                System.out.print(" \n");
+                String message = "at " + row_index + " index in col " + 1 + " val was not found";
+                missing_vals.add(message);
+            }
 
+// Index 2
+            try {
+                System.out.printf(Locale.US, "%s: %s \n", reader.columnLabels.get(2), reader.get(2));
+            } catch (Exception e) {
+                System.out.print(" \n");
+                String message = "at " + row_index + " index in col " + 2 + " val was not found";
+                missing_vals.add(message);
+            }
+
+// Index 3
+            try {
+                System.out.printf(Locale.US, "%s: %s \n", reader.columnLabels.get(3), reader.get(3));
+            } catch (Exception e) {
+                System.out.print(" \n");
+                String message = "at " + row_index + " index in col " + 3 + " val was not found";
+                missing_vals.add(message);
+            }
+
+// Index 4
+            try {
+                System.out.printf(Locale.US, "%s: %s \n", reader.columnLabels.get(4), reader.getInt(4));
+            } catch (Exception e) {
+                System.out.print(" \n");
+                String message = "at " + row_index + " index in col " + 4 + " val was not found";
+                missing_vals.add(message);
+            }
+
+// Index 5
+            try {
+                System.out.printf(Locale.US, "%s: %s \n", reader.columnLabels.get(5), reader.getInt(5));
+            } catch (Exception e) {
+                System.out.print(" \n");
+                String message = "at " + row_index + " index in col " + 5 + " val was not found";
+                missing_vals.add(message);
+            }
             row_index++;
         }
 
