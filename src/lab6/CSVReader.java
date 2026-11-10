@@ -1,8 +1,6 @@
 package lab6;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class CSVReader {
@@ -25,7 +23,26 @@ public class CSVReader {
      */
 
     public CSVReader(String filename,String delimiter,boolean hasHeader) throws IOException {
-        reader = new BufferedReader(new FileReader(filename));
+        this.reader = new BufferedReader(new FileReader(filename));
+        this.delimiter = delimiter;
+        this.hasHeader = hasHeader;
+        if(hasHeader)parseHeader();
+    }
+
+    public CSVReader(String filename,String delimiter) throws IOException {
+
+        // assume we have a header and - ???
+        this(filename, delimiter, true);
+    }
+
+    public CSVReader(String filename) throws IOException {
+
+        // assume we have a header and the delimiter is "," - ???
+        this(filename, ",", true);
+    }
+
+    public CSVReader(Reader reader, String delimiter, boolean hasHeader) throws IOException {
+        this.reader = (BufferedReader) reader;
         this.delimiter = delimiter;
         this.hasHeader = hasHeader;
         if(hasHeader)parseHeader();
